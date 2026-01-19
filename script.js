@@ -12,6 +12,7 @@ const generatePalette = () => {
         colorSquare.style.backgroundColor = el;
         palette.appendChild(colorSquare);
     })
+    palette.children[0].classList.add("selected-color");
 }
 
 const selectedColor = (event) => {
