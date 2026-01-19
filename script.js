@@ -17,10 +17,12 @@ const generatePalette = () => {
 
 const selectedColor = (event) => {
     const paletteColors = palette.children;
-    for (let i = 0; i < paletteColors.length; i++) {
-        paletteColors[i].classList.remove("selected-color")
+    if (event.target.classList[0] == "color") {
+        for (let i = 0; i < paletteColors.length; i++) {
+            paletteColors[i].classList.remove("selected-color")
+        }
+        event.target.classList.add("selected-color");
     }
-    event.target.classList.add("selected-color");
     color = event.target.style.backgroundColor;
 }
 
