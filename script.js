@@ -2,14 +2,16 @@ const resizeInput = document.getElementById("canvas-input")
 const resizeBtn = document.getElementById("resize-button");
 const canvas = document.getElementById("canvas");
 const palette = document.getElementById("color-palette");
-const colorList = ["black", "red", "orange", "yellow", "green", "blue", "purple"];
-let color = colorList[0];
+const colorList = [[0, 0, 0], [255, 0, 0], [255, 165, 0], [255, 255, 0], [0, 128, 0], [0, 0, 255], [128, 0, 128]];
+let color = "rgb(0, 0, 0)";
+const darkenBtn = document.getElementById("darken");
+let willDarken = false;
 
 const generatePalette = () => {
     colorList.forEach(el=>{
         const colorSquare = document.createElement("div");
         colorSquare.classList.add("color");
-        colorSquare.style.backgroundColor = el;
+        colorSquare.style.backgroundColor = `rgb(${el})`;
         palette.appendChild(colorSquare);
     })
     palette.children[0].classList.add("selected-color");
@@ -58,8 +60,23 @@ const generateCanvas = () => {
     }
 }
 
-const fillPixel = (pixel, selectedColor) => {
-    pixel.style.backgroundColor = selectedColor;
+const fillPixel = (pixel) => {
+    if (willDarken) {
+        const regex = /[\d]+/g;
+        let rgb = color.match(regex);
+        pixel.style.backgroundColor = color;
+        const newrgb = rgb.map(el=>{
+            if(Number(el) - 5 < 0) {
+                return 0;
+            } else {
+                return Number(el) - 5;
+            }
+        })
+        color = `rgb(${newrgb})`
+        console.log(color);
+    } else {
+        pixel.style.backgroundColor = color;
+    }
 }
 
 const checkDrawInput = (event) => {
@@ -83,6 +100,16 @@ const checkResizeInput = (event) => {
     }
 }
 
+const toggleDarken = () => {
+    if (willDarken) {
+        darkenBtn.classList.remove("selected-option");
+        willDarken = false;
+    } else if (!willDarken) {
+        darkenBtn.classList.add("selected-option");
+        willDarken = true;
+    }
+}
+
 resizeBtn.addEventListener("click", checkResizeInput);
 resizeInput.addEventListener("keypress", checkResizeInput)
 generateCanvas();
@@ -90,3 +117,4 @@ generatePalette();
 canvas.addEventListener("click", checkDrawInput);
 canvas.addEventListener("mouseover", checkDrawInput);
 palette.addEventListener("click", selectedColor);
+darkenBtn.addEventListener("click", toggleDarken);
