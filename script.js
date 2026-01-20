@@ -113,6 +113,8 @@ const checkResizeInput = (event) => {
 
 const toggleDarken = () => {
     if (canDarken) {
+        const selectedColor = document.querySelector(".selected-color");
+        color = selectedColor.style.backgroundColor;
         darkenBtn.classList.remove("selected-option");
         canDarken = false;
     } else if (!canDarken) {
